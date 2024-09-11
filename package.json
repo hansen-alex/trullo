@@ -1,0 +1,20 @@
+{
+  "name": "trullo",
+  "version": "1.0.0",
+  "description": "Individuell examinationsuppgift - Trullo | FJS23",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "nodemon server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.20.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21"
+  }
+}
