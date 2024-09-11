@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Types, Schema, model } from "mongoose";
 
 export interface IProject {
-  _id: string;
+  _id: Types.ObjectId;
   name: string;
   owner: string;
   users: string[];
@@ -9,7 +9,7 @@ export interface IProject {
 }
 
 const projectSchema = new Schema<IProject>({
-  _id: String,
+  _id: Types.ObjectId,
   name: { type: String, required: true },
   owner: { type: String, required: true },
   users: { type: [String], required: true },

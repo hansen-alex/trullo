@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Types, Schema, model } from "mongoose";
 
 export interface ITask {
-  _id: string;
+  _id: Types.ObjectId;
   title: string;
   description?: string;
   status: "to-do" | "in progress" | "done" | "blocked";
@@ -12,7 +12,7 @@ export interface ITask {
 }
 
 const taskSchema = new Schema<ITask>({
-  _id: String,
+  _id: Types.ObjectId,
   title: { type: String, required: true },
   description: String,
   status: {
