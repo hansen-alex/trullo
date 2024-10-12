@@ -9,6 +9,7 @@ import {
   UpdateUserById,
   DeleteUserById,
   SignIn,
+  ResetPassword,
 } from "./routes/user";
 import {
   GetProjects,
@@ -48,6 +49,7 @@ app.post("/api/user", CreateUser);
 app.post("/api/user/signin", SignIn);
 app.get("/api/user/:id", GetUserById);
 app.put("/api/user/:id", UpdateUserById);
+app.put("/api/user/:id/resetpassword", ResetPassword);
 app.delete("/api/user/:id", DeleteUserById);
 
 app.get("/api/project", GetProjects);

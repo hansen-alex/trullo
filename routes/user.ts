@@ -3,6 +3,10 @@ import { Types } from "mongoose";
 import bcrypt from "bcrypt"
 import { User } from "../database/models/user";
 
+const encryptPassword = (password: string) => {
+  return bcrypt.hash(password, 10);
+}
+
 export const GetUsers = async (request: Request, response: Response) => {
   try {
     const users = await User.find();
@@ -30,7 +34,7 @@ export const CreateUser = async (request: Request, response: Response) => {
   try {
     const user = await new User(request.body); //TODO: validation on data, ex role
     user._id = new Types.ObjectId();
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = await encryptPassword(user.password);
     user.save();
 
     return response.status(200).send(user);
@@ -44,7 +48,7 @@ export const SignIn = async (request: Request, response: Response) => {
     const user = await User.findOne({ email: request.body.email });
     
     if(!request.body.password) return response.status(400).send({ message: "No password submitted." });
-    if(!user) return response.status(404).send({ message: "Email and password do not match." })
+    if(!user) return response.status(400).send({ message: "Email and password do not match." })
     if(!await bcrypt.compare(request.body.password, user!.password)) return response.status(400).send({ message: "Email and password do not match." });
 
     return response.status(200).send(/*{ token: "TODO" }*/);
@@ -61,10 +65,28 @@ export const UpdateUserById = async (request: Request, response: Response) => {
       request.body,
       { new: true }
     );
-    return response.status(200).send(updatedUser); //Does not always (ever?) return updated name
+    return response.status(200).send(updatedUser);
   } catch (error) {
-    console.log(error);
+    return response.status(500).send(error);
+  }
+};
 
+export const ResetPassword = async (request: Request, response: Response) => {
+  try {
+    if(!request.body.oldPassword) return response.status(400).send({ message: "No password submitted." });
+    if(!request.body.newPassword) return response.status(400).send({ message: "No new password submitted." });
+    if(request.body.oldPassword == request.body.newPassword) return response.status(400).send({ message: "New password is the same as old." });
+    
+    const user = await User.findById(request.params.id)
+    if(!user) return response.status(404).send({ message: "User not found." })
+
+    if(!await bcrypt.compare(request.body.oldPassword, user!.password)) return response.status(400).send({ message: "Incorrect password." });
+
+    user.password = await encryptPassword(request.body.newPassword);
+    user.save();
+
+    return response.status(200).send();
+  } catch (error) {
     return response.status(500).send(error);
   }
 };
