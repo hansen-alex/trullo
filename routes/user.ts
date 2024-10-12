@@ -41,7 +41,8 @@ export const UpdateUserById = async (request: Request, response: Response) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       request.params.id,
-      request.body /* TODO: validation, tried to update field "namee", got a status 200. also got 200 on unexisting id (probably an issue elsewhere too), might be intended???*/
+      request.body, /* TODO: validation, tried to update field "namee", got a status 200. also got 200 on unexisting id (probably an issue elsewhere too), might be intended???*/
+      { new: true }
     );
     return response.status(200).send(updatedUser); //Does not always (ever?) return updated name
   } catch (error) {
@@ -54,6 +55,10 @@ export const UpdateUserById = async (request: Request, response: Response) => {
 export const DeleteUserById = async (request: Request, response: Response) => {
   try {
     const deletedUser = await User.findByIdAndDelete(request.params.id);
+
+    //what to do with projects this user owns? delete?
+    //update any task this user is assigned to
+
     return response.status(200).send(deletedUser);
   } catch (error) {
     return response.status(500).send(error);

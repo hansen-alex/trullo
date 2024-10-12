@@ -5,8 +5,9 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  role: /* TODO: This would be a user role over the hole app, i want it per project */
+  role: /* TODO: This would be a user role over the hole app, would make more sense per project */
   "user" | "admin" | "owner";
+  joinedProjects: string[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -15,6 +16,7 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["user", "admin", "owner"], required: true },
+  joinedProjects: [String]
 });
 
 export const User = model("User", userSchema);
