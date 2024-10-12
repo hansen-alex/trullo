@@ -8,6 +8,7 @@ import {
   CreateUser,
   UpdateUserById,
   DeleteUserById,
+  SignIn,
 } from "./routes/user";
 import {
   GetProjects,
@@ -44,6 +45,7 @@ mongoose.connect(process.env.DB_URI as string, {
 
 app.get("/api/user", GetUsers);
 app.post("/api/user", CreateUser);
+app.post("/api/user/signin", SignIn);
 app.get("/api/user/:id", GetUserById);
 app.put("/api/user/:id", UpdateUserById);
 app.delete("/api/user/:id", DeleteUserById);
